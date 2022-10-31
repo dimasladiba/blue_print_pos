@@ -356,7 +356,7 @@ class BluePrintPos {
       bytes += generator.cut();
     }*/
 
-    bytes += generator.barcode(Barcode.upcA(data));
+    bytes += generator.barcode(Barcode.code128(data));
     return bytes;
   }
 
