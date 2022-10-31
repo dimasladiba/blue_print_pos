@@ -337,6 +337,7 @@ class BluePrintPos {
         bool useCut = false,
         bool useRaster = false,
       }) async {
+    data = [];
     List<int> bytes = <int>[];
     final CapabilityProfile profile = await CapabilityProfile.load();
     final Generator generator = Generator(paperSize, profile);
@@ -355,7 +356,8 @@ class BluePrintPos {
     if (useCut) {
       bytes += generator.cut();
     }*/
-
+    print("barcode");
+    print(bytes);
     bytes += generator.barcode(Barcode.code128(data));
     return bytes;
   }
