@@ -14,6 +14,7 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart' as flutter_blue;
 import 'package:flutter_blue_plus/gen/flutterblueplus.pb.dart' as proto;
 import 'package:image/image.dart' as img;
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:esc_pos_utils_plus/esc_pos_utils.dart';
 
 class BluePrintPos {
   BluePrintPos._() {
@@ -240,6 +241,26 @@ class BluePrintPos {
     );
   }
 
+  Future<void> printBarcode(
+      List<int> bytes, {
+        int width = 120,
+        int feedCount = 0,
+        bool useCut = false,
+        bool useRaster = false,
+        PaperSize paperSize = PaperSize.mm58,
+      }) async {
+    final List<int> byteBuffer = await _getBytes2(
+      bytes,
+      customWidth: width,
+      feedCount: feedCount,
+      useCut: useCut,
+      useRaster: useRaster,
+      paperSize: paperSize,
+    );
+    _printProcess(byteBuffer);
+  }
+
+
   /// Reusable method for print text, image or QR based value [byteBuffer]
   /// Handler Android or iOS will use method writeBytes from ByteBuffer
   /// But in iOS more complex handler using service and characteristic
@@ -305,6 +326,37 @@ class BluePrintPos {
     if (useCut) {
       bytes += generator.cut();
     }
+    return bytes;
+  }
+
+  Future<List<int>> _getBytes2(
+      List<int> data, {
+        PaperSize paperSize = PaperSize.mm58,
+        int customWidth = 0,
+        int feedCount = 0,
+        bool useCut = false,
+        bool useRaster = false,
+      }) async {
+    List<int> bytes = <int>[];
+    final CapabilityProfile profile = await CapabilityProfile.load();
+    final Generator generator = Generator(paperSize, profile);
+    /*final img.Image _resize = img.copyResize(
+      img.decodeImage(data)!,
+      width: customWidth > 0 ? customWidth : paperSize.width,
+    );
+    if (useRaster) {
+      bytes += generator.imageRaster(_resize);
+    } else {
+      bytes += generator.image(_resize);
+    }
+    if (feedCount > 0) {
+      bytes += generator.feed(feedCount);
+    }
+    if (useCut) {
+      bytes += generator.cut();
+    }*/
+
+    bytes += generator.barcode(Barcode.upcA(data));
     return bytes;
   }
 
