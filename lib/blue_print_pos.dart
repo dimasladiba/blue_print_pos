@@ -13,8 +13,8 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart' as flutter_blue;
 import 'package:flutter_blue_plus/gen/flutterblueplus.pb.dart' as proto;
 import 'package:image/image.dart' as img;
 import 'package:qr_flutter/qr_flutter.dart';
-//import 'package:flutter_esc_pos_utils/flutter_esc_pos_utils.dart';
-import 'package:esc_pos_utils_plus/esc_pos_utils.dart';
+import 'package:flutter_esc_pos_utils/flutter_esc_pos_utils.dart';
+//import 'package:esc_pos_utils_plus/esc_pos_utils.dart';
 
 class BluePrintPos {
   BluePrintPos._() {
@@ -243,7 +243,7 @@ class BluePrintPos {
 
   Future<void> printBarcode(
       List<dynamic> bytes, {
-        int width = 140,
+        int width = 120,
         int feedCount = 0,
         bool useCut = false,
         bool useRaster = false,
@@ -332,7 +332,7 @@ class BluePrintPos {
   Future<List<int>> _getBytes2(
       List<dynamic> data, {
         PaperSize paperSize = PaperSize.mm58,
-        int customWidth = 140,
+        int customWidth = 120,
         int feedCount = 0,
         bool useCut = false,
         bool useRaster = false,
@@ -344,7 +344,7 @@ class BluePrintPos {
     print("data");
     print(data);
     print(bytes);
-    bytes += generator.barcode(Barcode.code128(data));
+    bytes += generator.barcode(Barcode.code128(data), height: 60 );
     print(bytes);
     if(feedCount > 0 ){
       bytes += generator.feed(feedCount);
