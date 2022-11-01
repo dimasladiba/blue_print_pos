@@ -8,12 +8,12 @@ import 'package:blue_print_pos/models/models.dart';
 import 'package:blue_print_pos/receipt/receipt_section_text.dart';
 import 'package:blue_print_pos/scanner/blue_scanner.dart';
 import 'package:blue_thermal_printer/blue_thermal_printer.dart' as blue_thermal;
-import 'package:esc_pos_utils_plus/esc_pos_utils.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart' as flutter_blue;
 import 'package:flutter_blue_plus/gen/flutterblueplus.pb.dart' as proto;
 import 'package:image/image.dart' as img;
 import 'package:qr_flutter/qr_flutter.dart';
+//import 'package:flutter_esc_pos_utils/flutter_esc_pos_utils.dart';
 import 'package:esc_pos_utils_plus/esc_pos_utils.dart';
 
 class BluePrintPos {
@@ -242,8 +242,8 @@ class BluePrintPos {
   }
 
   Future<void> printBarcode(
-      List<int> bytes, {
-        int width = 120,
+      List<dynamic> bytes, {
+        int width = 140,
         int feedCount = 0,
         bool useCut = false,
         bool useRaster = false,
@@ -330,35 +330,29 @@ class BluePrintPos {
   }
 
   Future<List<int>> _getBytes2(
-      List<int> data, {
+      List<dynamic> data, {
         PaperSize paperSize = PaperSize.mm58,
-        int customWidth = 0,
+        int customWidth = 140,
         int feedCount = 0,
         bool useCut = false,
         bool useRaster = false,
       }) async {
-    data = [];
     List<int> bytes = <int>[];
     final CapabilityProfile profile = await CapabilityProfile.load();
     final Generator generator = Generator(paperSize, profile);
-    /*final img.Image _resize = img.copyResize(
-      img.decodeImage(data)!,
-      width: customWidth > 0 ? customWidth : paperSize.width,
-    );
-    if (useRaster) {
-      bytes += generator.imageRaster(_resize);
-    } else {
-      bytes += generator.image(_resize);
-    }
-    if (feedCount > 0) {
+
+    print("data");
+    print(data);
+    print(bytes);
+    bytes += generator.barcode(Barcode.code128(data));
+    print(bytes);
+    if(feedCount > 0 ){
       bytes += generator.feed(feedCount);
     }
     if (useCut) {
       bytes += generator.cut();
-    }*/
-    print("barcode");
-    print(bytes);
-    bytes += generator.barcode(Barcode.code128(data));
+    }
+
     return bytes;
   }
 
