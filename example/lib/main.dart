@@ -4,8 +4,10 @@ import 'dart:typed_data';
 import 'package:blue_print_pos/blue_print_pos.dart';
 import 'package:blue_print_pos/models/models.dart';
 import 'package:blue_print_pos/receipt/receipt.dart';
+import 'package:blue_print_pos/receipt/receipt_text_key_value.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp(MyApp());
@@ -165,9 +167,21 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
+  Future<void> reqPermission() async {
+    final List<Permission> vaBluetooth =  <Permission>[
+      Permission.bluetoothScan,
+      Permission.bluetoothAdvertise,
+      Permission.bluetoothConnect
+    ];
+    await vaBluetooth.request();
 
+  }
   Future<void> _onScanPressed() async {
+    await reqPermission();
     setState(() => _isLoading = true);
+
+
+
     _bluePrintPos.scan().then((List<BlueDevice> devices) {
       if (devices.isNotEmpty) {
         setState(() {
@@ -253,6 +267,12 @@ class _MyAppState extends State<MyApp> {
       leftStyle: ReceiptTextStyleType.normal,
       rightStyle: ReceiptTextStyleType.normal,
     );
+    final List<ReceiptTextKeyValue> listKeyValueText = [];
+    listKeyValueText.add(ReceiptTextKeyValue('No', 'TP00120321030001'));
+    listKeyValueText.add(ReceiptTextKeyValue('Nama', 'Bapak Kumajin Ayhyu'));
+    listKeyValueText.add(ReceiptTextKeyValue('asdasd', 'Bapak Kumajin Ayhyu'));
+
+    receiptText.addKeyValueText(listKeyValueText);
     receiptText.addSpacer(count: 2);
 
     await _bluePrintPos.printReceiptText(receiptText);

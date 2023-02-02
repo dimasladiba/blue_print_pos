@@ -13,6 +13,7 @@ environment:
 dependencies:
   blue_print_pos:
     path: ../
+  permission_handler: ^10.2.0
 
   flutter:
     sdk: flutter

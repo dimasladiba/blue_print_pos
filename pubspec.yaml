@@ -11,7 +11,7 @@ environment:
 
 dependencies:
   # Handler bluetooth for Android
-  blue_thermal_printer: ^1.2.0
+  blue_thermal_printer: ^1.2.3
   # Utilities for generate ByteBuffer
   ##esc_pos_utils_plus: ^2.0.1+6
   flutter_esc_pos_utils: ^0.1.8

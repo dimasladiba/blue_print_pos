@@ -1,6 +1,7 @@
 import 'package:blue_print_pos/receipt/collection_style.dart';
 import 'package:blue_print_pos/receipt/receipt_image.dart';
 import 'package:blue_print_pos/receipt/receipt_pixel_space.dart';
+import 'package:blue_print_pos/receipt/receipt_text_key_value.dart';
 
 import 'receipt_alignment.dart';
 import 'receipt_line.dart';
@@ -106,6 +107,17 @@ ${CollectionStyle.all}
       ),
     );
     _data.add(leftRightText.html);
+  }
+
+  void addKeyValueText(List<ReceiptTextKeyValue> listKeyValueText) {
+    final List<String> listTable = listKeyValueText.map((ReceiptTextKeyValue e) => e.html).toList();
+    final String table = listTable.sublist(0,listTable.length).join('');
+    final String html = '''
+    <table>
+        $table
+      </table>      
+  ''';
+    _data.add(html);
   }
 
   /// Add new line as empty or dashed line.

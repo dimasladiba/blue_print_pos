@@ -17,6 +17,9 @@ class CollectionStyle {
               width: 576px;
               font-size: 1.8em
           }
+          table, td, tr{
+              border:none;
+          }
           
           .receipt {
               max-width: 576px;
